@@ -15,7 +15,7 @@ namespace TRMDataManager.App_Start
             {
                 post = new Operation
                 {
-                    tags = new List<string> { "Auth" },
+                    tags = new List<string> { "Authorization" },
                     consumes = new List<string>
                     {
                         "application/x-www-form-urlendoded"

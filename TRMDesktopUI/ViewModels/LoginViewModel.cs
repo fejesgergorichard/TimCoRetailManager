@@ -4,27 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls.Primitives;
 using TRMDesktopUI.Helpers;
 
 namespace TRMDesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _username;
-        private string _password;
-        private IAPIHelper _apiHelper;
+        private string username;
+        private string password;
+        private string errorMessage;
+        private IAPIHelper apiHelper;
 
-        public LoginViewModel(IAPIHelper apiHelper)
+        public LoginViewModel(IAPIHelper _apiHelper)
         {
-            _apiHelper = apiHelper;
+            this.apiHelper = _apiHelper;
         }
 
         public string Username
         {
-            get { return _username; }
+            get { return username; }
             set 
             {
-                _username = value;
+                username = value;
                 NotifyOfPropertyChange(() => Username);
                 NotifyOfPropertyChange(() => CanLogIn);
             }
@@ -32,12 +35,29 @@ namespace TRMDesktopUI.ViewModels
 
         public string Password
         {
-            get { return _password; }
+            get { return password; }
             set 
             {
-                _password = value;
+                password = value;
                 NotifyOfPropertyChange(() => Password);
                 NotifyOfPropertyChange(() => CanLogIn);
+            }
+        }
+
+        public bool IsErrorVisible
+        {
+            get { return ErrorMessage?.Length > 0; }
+        }
+
+
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set
+            {
+                errorMessage = value;
+                NotifyOfPropertyChange(() => ErrorMessage);
+                NotifyOfPropertyChange(() => IsErrorVisible);
             }
         }
 
@@ -59,11 +79,12 @@ namespace TRMDesktopUI.ViewModels
         {
             try
             {
-                var result = await _apiHelper.Authenticate(Username, Password);
+                var result = await apiHelper.Authenticate(Username, Password);
+                ErrorMessage = "";
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorMessage = ex.Message;
             }
         }
 

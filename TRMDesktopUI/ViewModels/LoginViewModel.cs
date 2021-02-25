@@ -4,21 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRMDesktopUI.Helpers;
 
 namespace TRMDesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _userName;
+        private string _username;
         private string _password;
+        private IAPIHelper _apiHelper;
 
-        public string UserName
+        public LoginViewModel(IAPIHelper apiHelper)
         {
-            get { return _userName; }
+            _apiHelper = apiHelper;
+        }
+
+        public string Username
+        {
+            get { return _username; }
             set 
             {
-                _userName = value;
-                NotifyOfPropertyChange(() => UserName);
+                _username = value;
+                NotifyOfPropertyChange(() => Username);
                 NotifyOfPropertyChange(() => CanLogIn);
             }
         }
@@ -39,7 +46,7 @@ namespace TRMDesktopUI.ViewModels
             get
             {
                 bool output = false;
-                if (UserName?.Length > 0 && Password?.Length > 0)
+                if (Username?.Length > 0 && Password?.Length > 0)
                 {
                     output = true;
                 }
@@ -48,9 +55,16 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public void LogIn()
+        public async Task LogIn()
         {
-            Console.WriteLine();
+            try
+            {
+                var result = await _apiHelper.Authenticate(Username, Password);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
     }

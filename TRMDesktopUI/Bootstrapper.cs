@@ -37,7 +37,8 @@ namespace TRMDesktopUI
             //             the EventAggretator as its Interface. We are going to ask for the interfaces.
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IAPIHelper, APIHelper>();
 
             // Reflections are performance-heavy but this is a one-time use of it, so its a good use. GetType is a reflection
             // Get every type of the current assembly where a type is a class and its name ends with "ViewModel"

@@ -38,5 +38,10 @@ namespace TRMDesktopUI.ViewModels
         {
             base.ActivateItem(salesVM);
         }
+
+        public void LoginScreen()
+        {
+            base.ActivateItem(container.GetInstance<LoginViewModel>());
+        }
     }
 }

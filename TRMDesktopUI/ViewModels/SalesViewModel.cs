@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TRMDesktopUI.ViewModels
 {
-    class SalesViewModel : Screen
+    public class SalesViewModel : Screen
     {
         private BindingList<string> cart;
         private BindingList<string> products;

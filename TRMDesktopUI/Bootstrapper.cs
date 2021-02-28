@@ -15,7 +15,7 @@ namespace TRMDesktopUI
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private SimpleContainer _container = new SimpleContainer();
+        private SimpleContainer container = new SimpleContainer();
 
         public Bootstrapper()
         {
@@ -29,7 +29,7 @@ namespace TRMDesktopUI
 
         protected override void Configure()
         {
-            _container.Instance(_container);
+            container.Instance(container);
 
             // Window manager: bringing windows in and out
             // one instance of window manager is needed
@@ -37,7 +37,7 @@ namespace TRMDesktopUI
             // we are going to connect to events through one aggregator.
             // we register the WindowManager class as its Interface.
             //             the EventAggretator as its Interface. We are going to ask for the interfaces.
-            _container
+            container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<IAPIHelper, APIHelper>()
@@ -50,7 +50,7 @@ namespace TRMDesktopUI
                 .Where(type => type.IsClass)
                 .Where(type => type.Name.EndsWith("ViewModel"))
                 .ToList()
-                .ForEach(viewModelType => _container.RegisterPerRequest(
+                .ForEach(viewModelType => container.RegisterPerRequest(
                     viewModelType, viewModelType.ToString(), viewModelType));
         }
 
@@ -61,17 +61,17 @@ namespace TRMDesktopUI
 
         protected override object GetInstance(Type service, string key)
         {
-            return _container.GetInstance(service, key);
+            return container.GetInstance(service, key);
         }
 
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return _container.GetAllInstances(service);
+            return container.GetAllInstances(service);
         }
 
         protected override void BuildUp(object instance)
         {
-            _container.BuildUp(instance);
+            container.BuildUp(instance);
         }
     }
 }

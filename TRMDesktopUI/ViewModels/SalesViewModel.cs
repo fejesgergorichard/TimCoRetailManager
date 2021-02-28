@@ -10,10 +10,9 @@ namespace TRMDesktopUI.ViewModels
 {
     class SalesViewModel : Screen
     {
-        private BindingList<string> products;
-        private string itemQuantity;
         private BindingList<string> cart;
-
+        private BindingList<string> products;
+        private int itemQuantity;
 
         public BindingList<string> Products
         {
@@ -35,7 +34,9 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public string ItemQuantity
+        // We enter a string into the ItemQuantity TextBox
+        // Caliburn micro checks if the input is a number
+        public int ItemQuantity
         {
             get { return itemQuantity; }
             set

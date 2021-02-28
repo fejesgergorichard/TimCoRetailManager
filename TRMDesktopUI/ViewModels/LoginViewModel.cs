@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using TRMDesktopUI.Helpers;
+using TRMDesktopUI.Library.Api;
 
 namespace TRMDesktopUI.ViewModels
 {
@@ -79,8 +80,11 @@ namespace TRMDesktopUI.ViewModels
         {
             try
             {
-                var result = await apiHelper.Authenticate(Username, Password);
                 ErrorMessage = "";
+                var result = await apiHelper.Authenticate(Username, Password);
+
+                // Capture more information about the user
+                await apiHelper.GetLoggedInUserInfo(result.Access_Token);
             }
             catch (Exception ex)
             {

@@ -8,7 +8,7 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDataManager.Library.DataAccess
 {
-    public class UserData
+    public class UserDataAccess
     {
         public List<UserModel> GetUserById(string id)
         {

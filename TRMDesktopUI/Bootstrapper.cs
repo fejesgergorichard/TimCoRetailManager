@@ -41,7 +41,8 @@ namespace TRMDesktopUI
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<IAPIHelper, APIHelper>()
-                .Singleton<ILoggedInUserModel, LoggedInUserModel>();
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
+                .PerRequest<IProductEndpoint, ProductEndpoint>();
 
             // Reflections are performance-heavy but this is a one-time use of it, so its a good use. GetType is a reflection
             // Get every type of the current assembly where a type is a class and its name ends with "ViewModel"

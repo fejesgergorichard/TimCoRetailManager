@@ -18,18 +18,18 @@ namespace TRMDataManager.Controllers
         public UserModel Get()
         {
             string userId = RequestContext.Principal.Identity.GetUserId();
-            UserData data = new UserData();
+            UserDataAccess userDataAccess = new UserDataAccess();
 
-            return data.GetUserById(userId).First();
+            return userDataAccess.GetUserById(userId).First();
         }
 
-        // GET api/user/5
+        // GET api/user/"guid"
         [Route("{userId}")]
         public UserModel Get(string userId)
         {
-            UserData data = new UserData();
+            UserDataAccess userDataAccess = new UserDataAccess();
 
-            return data.GetUserById(userId).First();
+            return userDataAccess.GetUserById(userId).First();
         }
     }
 }

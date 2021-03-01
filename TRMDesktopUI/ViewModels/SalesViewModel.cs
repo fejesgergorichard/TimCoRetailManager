@@ -5,16 +5,37 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRMDesktopUI.Library.Api;
+using TRMDesktopUI.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
 {
     public class SalesViewModel : Screen
     {
-        private BindingList<string> cart;
-        private BindingList<string> products;
+        private IProductEndpoint productEndpoint;
+        private BindingList<ProductModel> cart;
+        private BindingList<ProductModel> products;
         private int itemQuantity;
 
-        public BindingList<string> Products
+        public SalesViewModel(IProductEndpoint _productEndpoint)
+        {
+            productEndpoint = _productEndpoint;
+        }
+
+        // The ctor cannot be an async method, but we can override the OnViewLoaded which we inherit from screen and make it async
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+            await LoadProducts();
+        }
+
+        public async Task LoadProducts()
+        {
+            var productList = await productEndpoint.GetAll();
+            Products = new BindingList<ProductModel>(productList);
+        }
+
+        public BindingList<ProductModel> Products
         {
             get { return products; }
             set
@@ -24,7 +45,7 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<string> Cart
+        public BindingList<ProductModel> Cart
         {
             get { return cart; }
             set

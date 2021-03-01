@@ -42,7 +42,17 @@
         <!-- Column 0 -->
         <TextBlock Text="Items" Grid.Row="1" Grid.Column="1" />
         <ListBox x:Name="Products" Grid.Row="2" Grid.Column="1"
-                 MinHeight="200" MinWidth="150" />
+                 MinHeight="200" MinWidth="250" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding ProductName}" />
+                        <TextBlock Text="$" Margin="10 0 0 0"/>
+                        <TextBlock Text="{Binding RetailPrice}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
         <!-- Column 1 -->
         <StackPanel Orientation="Vertical" Grid.Column="2" 

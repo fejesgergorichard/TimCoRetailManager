@@ -19,6 +19,15 @@ namespace TRMDesktopUI.Library.Api
             InitializeClient();
         }
 
+        public HttpClient ApiClient
+        {
+            get
+            {
+                return apiClient;
+            }
+
+        }
+
         private void InitializeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];

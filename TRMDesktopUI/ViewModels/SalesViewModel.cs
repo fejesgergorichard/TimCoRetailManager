@@ -13,8 +13,9 @@ namespace TRMDesktopUI.ViewModels
     public class SalesViewModel : Screen
     {
         private IProductEndpoint productEndpoint;
-        private BindingList<ProductModel> cart;
+        private BindingList<CartItemModel> cart = new BindingList<CartItemModel>();
         private BindingList<ProductModel> products;
+        private ProductModel selectedProduct;
         private int itemQuantity;
 
         public SalesViewModel(IProductEndpoint _productEndpoint)
@@ -45,7 +46,18 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<ProductModel> Cart
+        public ProductModel SelectedProduct
+        {
+            get { return selectedProduct; }
+            set
+            {
+                selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
+                NotifyOfPropertyChange(() => CanAddToCart);
+            }
+        }
+
+        public BindingList<CartItemModel> Cart
         {
             get { return cart; }
             set
@@ -56,7 +68,7 @@ namespace TRMDesktopUI.ViewModels
         }
 
         // We enter a string into the ItemQuantity TextBox
-        // Caliburn micro checks if the input is a number
+        // Caliburn micro checks if the input is a number and validates it
         public int ItemQuantity
         {
             get { return itemQuantity; }
@@ -64,6 +76,7 @@ namespace TRMDesktopUI.ViewModels
             {
                 itemQuantity = value;
                 NotifyOfPropertyChange(() => ItemQuantity);
+                NotifyOfPropertyChange(() => CanAddToCart);
             }
         }
 
@@ -100,6 +113,10 @@ namespace TRMDesktopUI.ViewModels
 
                 // Make sure something is selected in the Products listbox
                 // Make sure item quantity is filled
+                if (ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
+                {
+                    output = true;
+                }
 
                 return output;
             }
@@ -107,7 +124,13 @@ namespace TRMDesktopUI.ViewModels
 
         public void AddToCart()
         {
+            CartItemModel item = new CartItemModel()
+            {
+                Product = SelectedProduct,
+                QuantityInCart = ItemQuantity
+            };
 
+            Cart.Add(item);
         }
 
         public bool CanRemoveFromCart

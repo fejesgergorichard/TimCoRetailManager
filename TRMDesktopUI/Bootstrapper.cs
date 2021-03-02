@@ -22,9 +22,7 @@ namespace TRMDesktopUI
             Initialize();
 
             ConventionManager.AddElementConvention<PasswordBox>(
-            PasswordBoxHelper.BoundPasswordProperty,
-            "Password",
-            "PasswordChanged");
+            PasswordBoxHelper.BoundPasswordProperty, "Password", "PasswordChanged");
         }
 
         protected override void Configure()

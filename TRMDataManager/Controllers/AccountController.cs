@@ -13,9 +13,11 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
+using TRMDataManager.Library.Models;
 using TRMDataManager.Models;
 using TRMDataManager.Providers;
 using TRMDataManager.Results;
+using TRMDataManager.Library.DataAccess;
 
 namespace TRMDataManager.Controllers
 {
@@ -336,6 +338,11 @@ namespace TRMDataManager.Controllers
             {
                 return GetErrorResult(result);
             }
+
+            // Register the user to the dbo table
+            UserModel trmUser = new UserModel() { Id = user.Id, FirstName = "Registered", LastName = "User", EmailAddress = user.Email, CreatedDate = DateTime.Now };
+            UserDataAccess uda = new UserDataAccess();
+            uda.RegisterUser(trmUser);
 
             return Ok();
         }

@@ -4,7 +4,7 @@ using TRMDataManager;
 using Swashbuckle.Application;
 using TRMDataManager.App_Start;
 
-// If the line below is commented out it turns out the Swagger endpoint
+// If the line below is commented out it turns off the Swagger endpoint
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
 namespace TRMDataManager

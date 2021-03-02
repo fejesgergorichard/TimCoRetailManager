@@ -18,5 +18,13 @@ namespace TRMDataManager.Library.DataAccess
             
             return output;
         }
+
+        public void RegisterUser(UserModel user)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+
+            sql.SaveData<dynamic>("[dbo].[spRegisterUser]",
+                new { user.Id, user.FirstName, user.LastName, user.EmailAddress }, "TRMData");
+        }
     }
 }

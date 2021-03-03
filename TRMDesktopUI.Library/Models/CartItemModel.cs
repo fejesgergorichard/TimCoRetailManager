@@ -19,7 +19,6 @@ namespace TRMDesktopUI.Library.Models
                 else
                     return $"{Product.ProductName} ({QuantityInCart})";
             }
-
         }
     }
 }

@@ -66,7 +66,7 @@
         <!-- Column 2 -->
         <TextBlock Text="Cart" Grid.Row="1" Grid.Column="3" />
         <ListBox x:Name="Cart" Grid.Row="2" Grid.Column="3"
-                 MinHeight="200" MinWidth="150" >
+                 MinHeight="200" MinWidth="250" SelectedItem="{Binding SelectedCartItem}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

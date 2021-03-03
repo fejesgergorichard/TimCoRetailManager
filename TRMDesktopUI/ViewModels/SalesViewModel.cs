@@ -16,7 +16,8 @@ namespace TRMDesktopUI.ViewModels
         private BindingList<CartItemModel> cart = new BindingList<CartItemModel>();
         private BindingList<ProductModel> products;
         private ProductModel selectedProduct;
-        private int itemQuantity;
+        private CartItemModel selectedCartItem;
+        private int itemQuantity = 1;
 
         public SalesViewModel(IProductEndpoint _productEndpoint)
         {
@@ -67,6 +68,17 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
+        public CartItemModel SelectedCartItem
+        {
+            get { return selectedCartItem; }
+            set
+            {
+                selectedCartItem = value;
+                NotifyOfPropertyChange(() => SelectedCartItem);
+                NotifyOfPropertyChange(() => CanRemoveFromCart);
+            }
+        }
+
         // We enter a string into the ItemQuantity TextBox
         // Caliburn micro checks if the input is a number and validates it
         public int ItemQuantity
@@ -84,8 +96,14 @@ namespace TRMDesktopUI.ViewModels
         {
             get
             {
-                // TODO - replace with calculation
-                return "$0.00";
+                decimal subTotal = 0;
+
+                foreach (var item in Cart)
+                {
+                    subTotal += (item.Product.RetailPrice * item.QuantityInCart);
+                }
+
+                return string.Format("${0:#,0.00}", subTotal);
             }
         }
         public string Tax
@@ -112,7 +130,7 @@ namespace TRMDesktopUI.ViewModels
                 bool output = false;
 
                 // Make sure something is selected in the Products listbox
-                // Make sure item quantity is filled
+                // and item quantity is filled
                 if (ItemQuantity > 0 && SelectedProduct?.QuantityInStock >= ItemQuantity)
                 {
                     output = true;
@@ -124,13 +142,29 @@ namespace TRMDesktopUI.ViewModels
 
         public void AddToCart()
         {
-            CartItemModel item = new CartItemModel()
-            {
-                Product = SelectedProduct,
-                QuantityInCart = ItemQuantity
-            };
+            CartItemModel existingItem = Cart.FirstOrDefault(x => x.Product == SelectedProduct);
 
-            Cart.Add(item);
+            if (existingItem != null)
+            {
+                existingItem.QuantityInCart += ItemQuantity;
+                Cart.ResetBindings();
+            }
+            else
+            {
+                CartItemModel item = new CartItemModel()
+                {
+                    Product = SelectedProduct,
+                    QuantityInCart = ItemQuantity
+                };
+
+                Cart.Add(item);
+            }
+
+            SelectedProduct.QuantityInStock -= ItemQuantity;
+            ItemQuantity = 1;
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Cart);
         }
 
         public bool CanRemoveFromCart
@@ -139,7 +173,10 @@ namespace TRMDesktopUI.ViewModels
             {
                 bool output = false;
 
-                // Make sure something is selected in the Cart
+                if (SelectedCartItem != null)
+                {
+                    output = true;
+                }
 
                 return output;
             }
@@ -147,7 +184,16 @@ namespace TRMDesktopUI.ViewModels
 
         public void RemoveFromCart()
         {
+            var product = Products.First(x => SelectedCartItem.Product == x);
 
+            product.QuantityInStock += SelectedCartItem.QuantityInCart;
+            Cart.Remove(SelectedCartItem);
+            
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Products);
+            NotifyOfPropertyChange(() => CanAddToCart);
+            Products.ResetBindings();
+            Cart.ResetBindings();
         }
 
         public bool CanCheckOut
